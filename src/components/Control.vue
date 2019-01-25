@@ -34,23 +34,23 @@
       </v-layout>
       <v-layout row>
         <v-flex text-xs-center text-xs-display-1 style="padding-top: 100px;">
-          <div class="hidden-sm-and-up font-weight-black display-3">00:00:00</div>
-          <div class="hidden-xs-only font-weight-black display-4">00:00:00</div>
+          <div class="hidden-sm-and-up font-weight-black display-3">{{timerDisplay}}</div>
+          <div class="hidden-xs-only font-weight-black display-4">{{timerDisplay}}</div>
         </v-flex>
       </v-layout>
     </v-layout>
     <v-bottom-nav :active.sync="bottomNav" :value="true" absolute color="transparent">
-      <v-btn color="teal" flat value="recent" @click="startTimer();">
+      <v-btn :disabled="disableStartButton ? true : false" color="teal" flat value="start" @click="startTimer();">
         <span>Start</span>
         <v-icon>timer</v-icon>
       </v-btn>
 
-      <v-btn color="teal" flat value="favorites">
+      <v-btn :disabled="disableStopButton ? true : false" color="teal" flat value="stop" @click="stopTimer();">
         <span>Stop</span>
         <v-icon>stop</v-icon>
       </v-btn>
 
-      <v-btn color="teal" flat value="nearby">
+      <v-btn :disabled="disablePauseButton ? true : false" color="teal" flat value="pause" @click="pauseTimer();">
         <span>Pause</span>
         <v-icon>pause_circle_outline</v-icon>
       </v-btn>
@@ -69,23 +69,76 @@ enum TimerStatus {
 
 @Component
 export default class Control extends Vue {
-  public bottomNav: string = '';
-  public weight: string = '180';
-  public selectedScale: string = '1';
-  public scaleItems: any = [
+  private timer: number = 0;
+  private totalSeconds: number = 0;
+  private timerDisplay: string = '00:00:00';
+  private disableStartButton: boolean = false;
+  private disableStopButton: boolean = true;
+  private disablePauseButton: boolean = true;
+  private bottomNav: string = '';
+  private weight: string = '180';
+  private selectedScale: string = '1';
+  private scaleItems: any = [
     { level: 'Advanced (Rx)', val: '1' },
     { level: 'Intermediate', val: '2' },
     { level: 'Beginner', val: '3' },
   ];
-  public timerStatus: TimerStatus = TimerStatus.Stopped;
+  private timerStatus: TimerStatus = TimerStatus.Stopped;
 
   constructor() {
     super();
   }
 
+  public updateTimer() {
+    if (this.timerStatus === TimerStatus.Running) {
+      this.totalSeconds++;
+      this.timerDisplay = `${this.GetHours()}:${this.GetMinutes()}:${this.GetSeconds()}`;
+
+      if (this.totalSeconds === 359999) { // 99:59:59
+        this.stopTimer();
+      }
+    }
+  }
+
+  public GetSeconds() {
+    const sec: number = this.totalSeconds % 60;
+    return sec >= 10 ? sec : '0' + sec;
+  }
+
+  public GetMinutes() {
+    const min: number = Math.floor((this.totalSeconds / 60) % 60);
+    return min >= 10 ? min : '0' + min;
+  }
+
+  public GetHours() {
+    const hrs: number = Math.floor(this.totalSeconds / 60 / 60);
+    return hrs >= 10 ? hrs : '0' + hrs;
+  }
+
   public startTimer() {
-    // tslint:disable-next-line:no-console
-    console.log('Start timer clicked');
+    if (this.timerStatus !== TimerStatus.Paused) {
+      this.totalSeconds = 0;
+      this.timer = setInterval(this.updateTimer, 1000);
+    }
+    this.timerStatus = TimerStatus.Running;
+    this.disableStartButton = true;
+    this.disableStopButton = false;
+    this.disablePauseButton = false;
+  }
+
+  public stopTimer() {
+    clearInterval(this.timer);
+    this.timerStatus = TimerStatus.Stopped;
+    this.disableStartButton = false;
+    this.disableStopButton = true;
+    this.disablePauseButton = true;
+  }
+
+  public pauseTimer() {
+    this.timerStatus = TimerStatus.Paused;
+    this.disableStartButton = false;
+    this.disableStopButton = false;
+    this.disablePauseButton = true;
   }
 }
 </script>
