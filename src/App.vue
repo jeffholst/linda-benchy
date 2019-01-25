@@ -1,29 +1,39 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
-  </div>
+  <v-app>
+    <v-toolbar app flat>
+      <v-toolbar-title class="headline text-uppercase">
+        <span>Linda</span>
+        <span class="font-weight-light"> Benchy</span>
+      </v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-btn flat @click="aboutClicked();">
+        <span class="mr-2" >About</span>
+      </v-btn>
+    </v-toolbar>
+
+    <v-content>
+      <Control/>
+    </v-content>
+  </v-app>
 </template>
 
-<script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
-import HelloWorld from './components/HelloWorld.vue';
+<script>
+import Control from './components/Control';
 
-@Component({
+export default {
+  name: 'App',
   components: {
-    HelloWorld,
+    Control,
   },
-})
-export default class App extends Vue {}
+  methods: {
+    aboutClicked() {
+      alert('About Clicked');
+    },
+  },
+  data() {
+    return {
+      //
+    };
+  },
+};
 </script>
-
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
