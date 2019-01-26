@@ -39,7 +39,7 @@
         </v-flex>
       </v-layout>
     </v-layout>
-    <v-bottom-nav :active.sync="bottomNav" :value="true" absolute color="transparent">
+    <v-bottom-nav :active.sync="bottomNav" :value="true" absolute="true" color="transparent" >
       <v-btn :disabled="disableStartButton ? true : false" color="teal" flat value="start" @click="startTimer();">
         <span>Start</span>
         <v-icon>timer</v-icon>
