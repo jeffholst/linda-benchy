@@ -27,7 +27,7 @@ export default {
   },
   methods: {
     aboutClicked() {
-      alert('About Clicked');
+      alert('Version 1.0');
     },
   },
   data() {
