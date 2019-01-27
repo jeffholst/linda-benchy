@@ -27,7 +27,7 @@ export default {
   },
   methods: {
     aboutClicked() {
-      alert('Version 1.0');
+      alert('Version 1.1');
     },
   },
   data() {
