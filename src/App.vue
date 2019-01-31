@@ -88,6 +88,14 @@ import Setup from './components/Setup';
 import Workout from './components/Workout';
 import Results from './components/Results';
 import {version} from '../package.json';
+import NoSleep from 'nosleep.js';
+
+const noSleep = new NoSleep();
+
+document.addEventListener('click', function enableNoSleep() {
+  document.removeEventListener('click', enableNoSleep, false);
+  noSleep.enable();
+}, false);
 
 export default {
   name: 'App',
