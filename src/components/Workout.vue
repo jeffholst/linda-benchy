@@ -1,7 +1,6 @@
 <template>
   <v-container grid-list-md>
     <v-layout column>
-  
       <v-layout row>
         <v-flex text-xs-center text-xs-display-1 style="padding-top: 0px;">
           <div class="hidden-sm-and-up font-weight-black display-3">{{timerDisplay}}</div>
@@ -13,6 +12,7 @@
           <v-btn 
             v-if="!disableStartButton"
             round
+            large
             color="green"
             class="white--text"
             @click="startTimer();"
@@ -56,6 +56,9 @@ enum TimerStatus {
 
 @Component
 export default class Control extends Vue {
+  @Prop() private method1!: () => void;
+  @Prop() private method2!: () => void;
+
   private startButtonText: string = 'START';
   private timer: number = 0;
   private totalSeconds: number = 0;
@@ -65,6 +68,7 @@ export default class Control extends Vue {
   private disablePauseButton: boolean = true;
 
   private timerStatus: TimerStatus = TimerStatus.Stopped;
+
 
   constructor() {
     super();
@@ -101,6 +105,7 @@ export default class Control extends Vue {
     if (this.timerStatus !== TimerStatus.Paused) {
       this.totalSeconds = 0;
       this.timer = setInterval(this.updateTimer, 1000);
+      this.$emit('start-timer');
     }
     this.timerStatus = TimerStatus.Running;
     this.disableStartButton = true;
@@ -115,6 +120,7 @@ export default class Control extends Vue {
     this.disableStartButton = false;
     this.disableStopButton = true;
     this.disablePauseButton = true;
+    this.$emit('stop-timer');
   }
 
   public pauseTimer() {
