@@ -9,9 +9,42 @@
       <v-btn flat @click="aboutClicked">
         <span class="mr-2" >About</span>
       </v-btn>
+      <v-tabs
+        slot="extension"
+        v-model="model"
+        centered
+        slider-color="black"
+      >
+        <v-tab href="#tab1">
+          Setup
+        </v-tab>
+        <v-tab href="#tab2">
+          Workout
+        </v-tab>
+        <v-tab href="#tab3">
+          Results
+        </v-tab>
+      </v-tabs>
     </v-toolbar>
     <v-content>
-      <Control/>
+      <v-tabs-items v-model="model">
+      <v-tab-item value='tab1'>
+        <v-card flat >
+          <Setup/>
+        </v-card>
+      </v-tab-item>
+      <v-tab-item value='tab2'>
+        <v-card flat >
+          <Workout/>
+        </v-card>
+      </v-tab-item>
+      <v-tab-item value='tab3'>
+        <v-card flat >
+          <Results/>
+        </v-card>
+      </v-tab-item>
+    </v-tabs-items>
+      
       <v-dialog v-model="aboutDialog" scrollable max-width="300px">
       <v-card>
         <v-card-title>"Linda" WOD</v-card-title>
@@ -51,13 +84,17 @@
 </template>
 
 <script>
-import Control from './components/Control';
+import Setup from './components/Setup';
+import Workout from './components/Workout';
+import Results from './components/Results';
 import {version} from '../package.json';
 
 export default {
   name: 'App',
   components: {
-    Control,
+    Setup,
+    Workout,
+    Results,
   },
   methods: {
     aboutClicked() {
@@ -66,6 +103,7 @@ export default {
   },
   data() {
     return {
+      model: 'tab1',
       aboutDialog: false,
       myVersion: version,
     };
