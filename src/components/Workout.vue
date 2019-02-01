@@ -56,6 +56,7 @@ enum TimerStatus {
 
 @Component
 export default class Control extends Vue {
+  @Prop() private selectedScale!: string;
 
   private disablePauseButton: boolean = true;             // indicates if pause button should be displayed
   private disableStartButton: boolean = false;            // indicates if start button should be displayed

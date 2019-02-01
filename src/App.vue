@@ -19,17 +19,19 @@
       <v-tabs-items v-model="model">
         <v-tab-item value="tab1">
           <v-card flat>
-            <Setup/>
+            <Setup
+              @scale-changed="selectedScaleChanged"
+            />
           </v-card>
         </v-tab-item>
         <v-tab-item value="tab2">
           <v-card flat>
-            <Workout @start-timer="timerStarted" @stop-timer="timerStopped"/>
+            <Workout @start-timer="timerStarted" @stop-timer="timerStopped"  v-bind:selectedScale="selectedScale"/>
           </v-card>
         </v-tab-item>
         <v-tab-item value="tab3">
           <v-card flat>
-            <Results/>
+            <Results />
           </v-card>
         </v-tab-item>
       </v-tabs-items>
@@ -114,12 +116,16 @@ export default {
     timerStopped(event, value) {
       noSleep.disable();
     },
+    selectedScaleChanged(newValue) {
+      this.selectedScale = newValue;
+    },
   },
   data() {
     return {
       model: 'tab1',
       aboutDialog: false,
       myVersion: version,
+      selectedScale: '1',
     };
   },
 };

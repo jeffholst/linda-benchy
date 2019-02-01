@@ -1,5 +1,6 @@
 <template>
   <v-container grid-list-md>
+    
     <v-layout column>
       <v-layout row>
         <v-flex xs6>
@@ -84,6 +85,7 @@ export default class Control extends Vue {
   }
 
   public changeScale(newItem: string) {
+    this.$emit('scale-changed', newItem);
     this.selectedScale = newItem;
     this.recalculate();
   }
