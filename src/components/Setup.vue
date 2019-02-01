@@ -20,42 +20,44 @@
           ></v-select>
         </v-flex>
       </v-layout>
-
       <v-layout row>
          <v-flex xs4>
           <v-card dark color="primary"> 
             <v-card-title primary-title class="justify-center" >
-              <div >
-                <h4>DEADLIFT</h4>
-                <h3>{{deadliftWeight}}</h3>
-              </div>
+                <h4 class="text-uppercase">Deadlift</h4>
+                 <v-text-field class="display-1"
+                    type="number"
+                    v-model="deadliftWeight"
+                    >
+                  </v-text-field>
             </v-card-title>
           </v-card>
         </v-flex>
         <v-flex xs4>
           <v-card dark color="primary"> 
             <v-card-title primary-title class="justify-center" >
-              <div >
-                <h4>BENCH</h4>
-                <h3>{{benchWeight}}</h3>
-              </div>
+              <h4 class="text-uppercase">Bench</h4>
+                 <v-text-field class="display-1"
+                    type="number"
+                    v-model="benchWeight"
+                    >
+                  </v-text-field>
             </v-card-title>
           </v-card>
         </v-flex>
         <v-flex xs4>
           <v-card dark color="primary"> 
             <v-card-title primary-title class="justify-center" >
-              <div >
-                <h4>CLEAN</h4>
-                <h3>{{cleanWeight}}</h3>
-              </div>
+              <h4 class="text-uppercase">Clean</h4>
+                 <v-text-field class="display-1"
+                    type="number"
+                    v-model="cleanWeight"
+                    >
+                  </v-text-field>
             </v-card-title>
           </v-card>
         </v-flex>
       </v-layout>
-
-
-
     </v-layout>
   </v-container>
 </template>

@@ -3,11 +3,11 @@
     <v-toolbar app flat>
       <v-toolbar-title class="headline text-uppercase">
         <span>Linda</span>
-        <span class="font-weight-light">Benchy</span>
+        <span class="font-weight-light"> WOD</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn flat @click="aboutClicked">
-        <span class="mr-2">About</span>
+        <span class="mr-2">Help</span>
       </v-btn>
       <v-tabs slot="extension" v-model="model" centered slider-color="black">
         <v-tab href="#tab1">Setup</v-tab>
@@ -36,29 +36,38 @@
 
       <v-dialog v-model="aboutDialog" scrollable max-width="300px">
         <v-card>
-          <v-card-title>"Linda" WOD</v-card-title>
+          <v-card-title class="text-uppercase">Linda WOD</v-card-title>
           <v-divider></v-divider>
           <v-card-text style="height: 300px;">
-            <div>10-9-8-7-6-5-4-3-2-1 Reps, For Time</div>
+            <p>
+              <strong>Reference: </strong><a href= "https://www.crossfit.com/workout/2018/05/26#/">CrossFit Linda</a>
+            </p>
+            <p>10-9-8-7-6-5-4-3-2-1 Reps, For Time<br>
+            Deadlift (1½ body weight)<br>
+            Bench Press (body weight)<br>
+            Clean (¾ bodyweight)<br>
+            </p>
+            <p>Set up three bars and storm through for time.</p>
+            <p>See below for scaling options.</p>
+            <v-divider/>
             <div>&nbsp;</div>
-            <h4>Advanced (Rx)</h4>
-            <div>Deadlift (1½ body weight)</div>
-            <div>Bench Press (body weight)</div>
-            <div>Clean (¾ bodyweight)</div>
+            <h3>Scaling</h3>
             <div>&nbsp;</div>
             <h4>Intermediate</h4>
+            <div>10-9-8-7-6-5-4-3-2-1 reps for time of:</div>
             <div>Deadlift (1¼-body weight)</div>
             <div>Bench Press (¾ body weight)</div>
             <div>Clean (½ body weight)</div>
             <div>&nbsp;</div>
             <h4>Beginner</h4>
+            <div>8-7-6-5-4-3-2-1 reps for time of:</div>
             <div>Deadlift (¾ body weight)</div>
             <div>Bench Press (½ body weight)</div>
             <div>Clean (⅓ body weight)</div>
             <div>&nbsp;</div>
-            <hr>
+            <v-divider/>
             <div>&nbsp;</div>
-            <div>LINDA BENCHY</div>
+            <div>LINDA WOD</div>
             <div>By: Jeff Holst</div>
             <div>Version: {{myVersion}}</div>
           </v-card-text>

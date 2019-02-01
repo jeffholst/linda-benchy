@@ -56,56 +56,82 @@ enum TimerStatus {
 
 @Component
 export default class Control extends Vue {
-  @Prop() private method1!: () => void;
-  @Prop() private method2!: () => void;
 
-  private startButtonText: string = 'START';
-  private timer: number = 0;
-  private totalSeconds: number = 0;
-  private timerDisplay: string = '00:00:00';
-  private disableStartButton: boolean = false;
-  private disableStopButton: boolean = true;
-  private disablePauseButton: boolean = true;
+  private disablePauseButton: boolean = true;             // indicates if pause button should be displayed
+  private disableStartButton: boolean = false;            // indicates if start button should be displayed
+  private disableStopButton: boolean = true;              // indicates if stop button should be dispalyed
+  private startButtonText: string = 'START';              // text displayed on the start/continue button
+  private timer: number = 0;                              // setInterval timer
+  private timerDisplay: string = '00:00:00';              // the timer display the user sees
+  private timerPausedTime: number = 0;                    // time timer has been paused in seconds
+  private timerStartTime: number = 0;                     // timer start time, millisecs since JAN-01-1970
+  private timerStatus: TimerStatus = TimerStatus.Stopped; // status of the timer
+  private totalSeconds: number = 0;                       // total seconds timer has been going without pauses
 
-  private timerStatus: TimerStatus = TimerStatus.Stopped;
+  private updateTimer() {
+    /*
+      called every second from timer setInterval while timer is running or paused
+    */
 
-
-  constructor() {
-    super();
-  }
-
-  public updateTimer() {
     if (this.timerStatus === TimerStatus.Running) {
-      this.totalSeconds++;
-      this.timerDisplay = `${this.GetHours()}:${this.GetMinutes()}:${this.GetSeconds()}`;
-
+      // update timer display
+      // this.timerDisplay = `${this.GetHours()}:${this.GetMinutes()}:${this.GetSeconds()}`;
+      this.timerDisplay = this.UpdateTimerDisplay();
+      // stop the timer if it's been running this long
       if (this.totalSeconds === 359999) {
         // 99:59:59
         this.stopTimer();
       }
+    } else {
+      this.timerPausedTime++;
     }
   }
 
-  public GetSeconds() {
+  private UpdateTimerDisplay() {
+    /*
+      return timer display and update totalSeconds
+    */
+    const d: Date = new Date();
+    this.totalSeconds = Math.floor((d.getTime() - this.timerStartTime) / 1000) - this.timerPausedTime;
+    return `${this.GetHours()}:${this.GetMinutes()}:${this.GetSeconds()}`;
+  }
+
+  private GetSeconds() {
+    /*
+      return seconds portion 00:00:ss
+    */
     const sec: number = this.totalSeconds % 60;
     return sec >= 10 ? sec : '0' + sec;
   }
 
-  public GetMinutes() {
+  private GetMinutes() {
+    /*
+      return minutes portion 00:mm:00
+    */
     const min: number = Math.floor((this.totalSeconds / 60) % 60);
     return min >= 10 ? min : '0' + min;
   }
 
-  public GetHours() {
+  private GetHours() {
+    /*
+      return hours portion hh:00:00
+    */
     const hrs: number = Math.floor(this.totalSeconds / 60 / 60);
     return hrs >= 10 ? hrs : '0' + hrs;
   }
 
-  public startTimer() {
+  private startTimer() {
+    /*
+      start timer
+    */
+
     if (this.timerStatus !== TimerStatus.Paused) {
       this.totalSeconds = 0;
       this.timer = setInterval(this.updateTimer, 1000);
+      // start noSleep operation, keeps PWAs from going to sleep while timer is going
       this.$emit('start-timer');
+      const d = new Date();
+      this.timerStartTime = d.getTime();  // get the current number of milliseconds since Jan 1 1970
     }
     this.timerStatus = TimerStatus.Running;
     this.disableStartButton = true;
@@ -113,17 +139,27 @@ export default class Control extends Vue {
     this.disablePauseButton = false;
   }
 
-  public stopTimer() {
+  private stopTimer() {
+    /*
+      stop timer
+    */
+
     clearInterval(this.timer);
     this.startButtonText = 'START';
     this.timerStatus = TimerStatus.Stopped;
     this.disableStartButton = false;
     this.disableStopButton = true;
     this.disablePauseButton = true;
+    this.timerPausedTime = 0;
+    // cancel noSleep operation
     this.$emit('stop-timer');
   }
 
-  public pauseTimer() {
+  private pauseTimer() {
+    /*
+      pause timer
+    */
+
     this.timerStatus = TimerStatus.Paused;
     this.startButtonText = 'CONTINUE';
     this.disableStartButton = false;
