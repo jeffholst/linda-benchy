@@ -4,6 +4,7 @@
       <v-layout row>
         <v-flex xs6>
           <v-text-field 
+            type="number"
             v-model="weight"
             label="Body Weight"
             required
@@ -25,7 +26,8 @@
           <v-card dark color="primary"> 
             <v-card-title primary-title class="justify-center" >
                 <h4 class="text-uppercase">Deadlift</h4>
-                 <v-text-field class="display-1"
+                 <v-text-field 
+                    v-bind:class="buttonTextSize"
                     type="number"
                     v-model="deadliftWeight"
                     >
@@ -37,7 +39,8 @@
           <v-card dark color="primary"> 
             <v-card-title primary-title class="justify-center" >
               <h4 class="text-uppercase">Bench</h4>
-                 <v-text-field class="display-1"
+                 <v-text-field
+                    v-bind:class="buttonTextSize"
                     type="number"
                     v-model="benchWeight"
                     >
@@ -49,7 +52,8 @@
           <v-card dark color="primary"> 
             <v-card-title primary-title class="justify-center" >
               <h4 class="text-uppercase">Clean</h4>
-                 <v-text-field class="display-1"
+                 <v-text-field
+                    v-bind:class="buttonTextSize"
                     type="number"
                     v-model="cleanWeight"
                     >
@@ -105,6 +109,23 @@ export default class Control extends Vue {
   constructor() {
     super();
     this.recalculate();
+  }
+
+  private get buttonTextSize() {
+    let rval: string;
+
+    switch (this.$vuetify.breakpoint.name) {
+        case 'xs':
+        case 'sm': rval = "headline";
+        break;
+        case 'md': 
+        case 'lg':
+        case 'xl': 
+        default: rval = "display-1";
+        break;
+      }
+
+      return(rval);
   }
 
   private changeScale(newItem: string) {
