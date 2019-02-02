@@ -9,33 +9,35 @@
       <v-btn flat @click="aboutClicked">
         <span class="mr-2">Help</span>
       </v-btn>
-      <v-tabs slot="extension" v-model="model" centered slider-color="black">
-        <v-tab href="#tab1">Setup</v-tab>
-        <v-tab href="#tab2">Workout</v-tab>
-        <v-tab href="#tab3">Results</v-tab>
-      </v-tabs>
     </v-toolbar>
     <v-content>
-      <v-tabs-items v-model="model">
-        <v-tab-item value="tab1">
-          <v-card flat>
-            <Setup
-              @scale-changed="selectedScaleChanged"
-            />
-          </v-card>
-        </v-tab-item>
-        <v-tab-item value="tab2">
-          <v-card flat>
-            <Workout @start-timer="timerStarted" @stop-timer="timerStopped"  v-bind:selectedScale="selectedScale"/>
-          </v-card>
-        </v-tab-item>
-        <v-tab-item value="tab3">
-          <v-card flat>
-            <Results />
-          </v-card>
-        </v-tab-item>
-      </v-tabs-items>
+      <v-stepper v-model="stepCompleted">
+        <v-stepper-header>
+          <v-stepper-step :complete="stepCompleted > 1" step="1">Setup</v-stepper-step>
 
+          <v-divider></v-divider>
+
+          <v-stepper-step :complete="stepCompleted > 2" step="2">Workout</v-stepper-step>
+
+          <v-divider></v-divider>
+
+          <v-stepper-step :complete="stepCompleted > 2" step="3">Results</v-stepper-step>
+        </v-stepper-header>
+
+        <v-stepper-items>
+          <v-stepper-content step="1">
+            <Setup @scale-changed="selectedScaleChanged" @setup-complete="setupComplete"/>
+          </v-stepper-content>
+
+          <v-stepper-content step="2">
+            <Workout @start-timer="timerStarted" @stop-timer="timerStopped" v-bind:selectedScale="selectedScale" @workout-complete="workoutComplete"/>
+          </v-stepper-content>
+
+          <v-stepper-content step="3">
+            <Results @reset-app="resetApp" v-bind:timerDisplay="timerDisplay" />
+          </v-stepper-content>
+        </v-stepper-items>
+      </v-stepper>
       <v-dialog v-model="aboutDialog" scrollable max-width="300px">
         <v-card>
           <v-card-title class="text-uppercase">Linda WOD</v-card-title>
@@ -119,13 +121,24 @@ export default {
     selectedScaleChanged(newValue) {
       this.selectedScale = newValue;
     },
+    setupComplete() {
+      this.stepCompleted = 2;
+    },
+    workoutComplete(workoutTime) {
+      this.stepCompleted = 3;
+      this.timerDisplay = workoutTime;
+    },
+    resetApp() {
+      this.stepCompleted = 1;
+    },
   },
   data() {
     return {
-      model: 'tab1',
+      stepCompleted: 0,
       aboutDialog: false,
       myVersion: version,
       selectedScale: '1',
+      timerDisplay: '',
     };
   },
 };

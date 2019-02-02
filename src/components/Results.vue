@@ -1,36 +1,35 @@
 <template>
-  <v-container grid-list-md>
-    <v-layout column>
-      <v-card flat >
-        <v-layout row>
-          <v-flex xs3>
-            <div>Reps</div>
-          </v-flex>
-          <v-flex xs3>
-            <div>Deadlift</div>
-          </v-flex>
-          <v-flex xs3>
-             <div>Bench</div>
-          </v-flex>
-          <v-flex xs3>
-            <div>Clean</div>
-          </v-flex>
-        </v-layout>
-        <v-layout v-for="i in repScheme" :key="i" row>
-          <v-flex xs3>
-            <div>{{i}}</div>
-          </v-flex>
-          <v-flex xs3>
-            <div>---</div>
-          </v-flex>
-          <v-flex xs3>
-            <div>---</div>
-          </v-flex>
-          <v-flex xs3>
-            <div>---</div>
-          </v-flex>
-        </v-layout>
-      </v-card>
+  <v-container>
+    <v-layout row>
+      <v-flex>
+        <h3>Time: {{timerDisplay}}</h3>
+      </v-flex>
+    </v-layout>
+      <v-layout row>
+        <v-flex xs12>
+          <div>10</div>
+          <div>9</div>
+          <div>8</div>
+          <div>7</div>
+          <div>6</div>
+          <div>5</div>
+          <div>4</div>
+          <div>3</div>
+          <div>2</div>
+          <div>1</div>
+      </v-flex>
+    </v-layout>
+    <v-layout row >
+      <v-flex xs12 class="text-xs-center"> 
+        <v-btn
+          round
+          large
+          color="orange"
+          class="white--text"
+          @click="resetApp"
+          >Reset
+        </v-btn>
+      </v-flex>
     </v-layout>
   </v-container>
 </template>
@@ -40,7 +39,12 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 
 @Component
 export default class Control extends Vue {
-   private repScheme: number[] = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1 ];
+  @Prop() private timerDisplay!: string;
+  private repScheme: number[] = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1 ];
+
+  private resetApp() {
+    this.$emit('reset-app');
+  }
 }
 </script>
 

@@ -91,6 +91,22 @@
         </v-flex>
       </v-layout>
     </v-layout>
+    <v-layout row style="padding-top: 10px;">
+      <v-flex>
+        <v-card >
+          <v-card-title primary-title>
+            <div>
+              <div class="headline">Instructions</div>
+              <ol>
+                <li>Start timer</li>
+                <li>Click lift buttons after completion</li>
+                <li>Click stop when finished</li>
+              </ol>
+            </div>
+          </v-card-title>
+        </v-card>
+      </v-flex>
+    </v-layout>
   </v-container>
 </template>
 
@@ -206,6 +222,7 @@ export default class Control extends Vue {
     this.timerPausedTime = 0;
     // cancel noSleep operation
     this.$emit('stop-timer');
+    this.workoutComplete();
   }
 
   private pauseTimer() {
@@ -218,6 +235,13 @@ export default class Control extends Vue {
     this.disableStartButton = false;
     this.disableStopButton = false;
     this.disablePauseButton = true;
+  }
+
+  private workoutComplete() {
+    /*
+      workout finished
+    */
+    this.$emit('workout-complete', this.timerDisplay); // finished workout
   }
 }
 </script>

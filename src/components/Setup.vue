@@ -1,6 +1,5 @@
 <template>
   <v-container grid-list-md>
-    
     <v-layout column>
       <v-layout row>
         <v-flex xs6>
@@ -60,7 +59,7 @@
         </v-flex>
       </v-layout>
     </v-layout>
-    <v-layout row style="padding-top: 10px;">
+    <v-layout row style="padding-top: 0px;">
       <v-flex>
         <v-card >
           <v-card-title primary-title>
@@ -70,12 +69,16 @@
                 <li>Enter your body weight</li>
                 <li>Select workout scale</li>
                 <li>Modify weights if necessary</li>
-                <li>Setup 3 bars</li>
+                <li class="hidden-sm-and-down">Setup 3 bars</li>
               </ol>
             </div>
           </v-card-title>
           <v-card-actions>
-            <v-btn flat color="orange">Continue to Workout</v-btn>
+            <v-btn 
+              flat color="orange"
+              @click="setupComplete">
+              Continue to Workout
+            </v-btn>
         </v-card-actions>
         </v-card>
       </v-flex>
@@ -94,7 +97,7 @@ export default class Control extends Vue {
   private weight: number = 0;
   private selectedScale: string = '1';
   private scaleItems: any = [
-    { text: 'Advanced (Rx)', value: '1' },
+    { text: 'Rx', value: '1' },
     { text: 'Intermediate', value: '2' },
     { text: 'Beginner', value: '3' },
   ];
@@ -104,13 +107,13 @@ export default class Control extends Vue {
     this.recalculate();
   }
 
-  public changeScale(newItem: string) {
+  private changeScale(newItem: string) {
     this.$emit('scale-changed', newItem);
     this.selectedScale = newItem;
     this.recalculate();
   }
 
-  public recalculate() {
+  private recalculate() {
     let deadliftMultiplier = 1;
     let benchMultiplier = 1;
     let cleanMultiplier = 1;
@@ -132,6 +135,13 @@ export default class Control extends Vue {
     this.deadliftWeight = Math.round(this.weight * deadliftMultiplier);
     this.benchWeight = Math.round(this.weight * benchMultiplier);
     this.cleanWeight = Math.round(this.weight * cleanMultiplier);
+  }
+
+  private setupComplete() {
+    /*
+      setup complete
+    */
+    this.$emit('setup-complete'); // finished setup
   }
 }
 </script>
