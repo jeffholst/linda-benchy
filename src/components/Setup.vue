@@ -60,6 +60,26 @@
         </v-flex>
       </v-layout>
     </v-layout>
+    <v-layout row style="padding-top: 10px;">
+      <v-flex>
+        <v-card >
+          <v-card-title primary-title>
+            <div>
+              <div class="headline">Instructions</div>
+              <ol>
+                <li>Enter your body weight</li>
+                <li>Select workout scale</li>
+                <li>Modify weights if necessary</li>
+                <li>Setup 3 bars</li>
+              </ol>
+            </div>
+          </v-card-title>
+          <v-card-actions>
+            <v-btn flat color="orange">Continue to Workout</v-btn>
+        </v-card-actions>
+        </v-card>
+      </v-flex>
+    </v-layout>
   </v-container>
 </template>
 
