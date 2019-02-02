@@ -3,6 +3,55 @@
     <v-layout column>
       <v-layout row>
         <v-flex text-xs-center text-xs-display-1 style="padding-top: 0px;">
+          Round 1 of 10
+        </v-flex>
+      </v-layout>
+        <v-layout row text-xs-center>
+        <v-flex xs4>
+          <v-btn
+            small
+            color="blue"
+            class="hidden-sm-and-up white--text"
+          >{{buttonNameDeadlift}}
+          </v-btn>
+           <v-btn
+            large
+            color="blue"
+            class="hidden-xs-only white--text"
+          >{{buttonNameDeadlift}}
+          </v-btn>
+        </v-flex>
+        <v-flex xs4>
+           <v-btn
+            small
+            color="blue"
+            class="hidden-sm-and-up white--text"
+          >{{buttonNameBenchpress}}
+          </v-btn>
+           <v-btn
+            large
+            color="blue"
+            class="hidden-xs-only white--text"
+          >{{buttonNameBenchpress}}
+          </v-btn>
+        </v-flex>
+        <v-flex xs4>
+          <v-btn
+            small
+            color="blue"
+            class="hidden-sm-and-up white--text"
+          >{{buttonNameClean}}
+          </v-btn>
+           <v-btn
+            large
+            color="blue"
+            class="hidden-xs-only white--text"
+          >{{buttonNameClean}}
+          </v-btn>
+        </v-flex>
+      </v-layout>
+      <v-layout row>
+        <v-flex text-xs-center text-xs-display-1 style="padding-top: 0px;">
           <div class="hidden-sm-and-up font-weight-black display-3">{{timerDisplay}}</div>
           <div class="hidden-xs-only font-weight-black display-4">{{timerDisplay}}</div>
         </v-flex>
@@ -58,6 +107,9 @@ enum TimerStatus {
 export default class Control extends Vue {
   @Prop() private selectedScale!: string;
 
+  private buttonNameDeadlift: string = 'Deadlift';        // display name for deadlift button
+  private buttonNameBenchpress: string = 'Bench';         // display name for bench press button
+  private buttonNameClean: string = 'Clean';              // display name for clean button
   private disablePauseButton: boolean = true;             // indicates if pause button should be displayed
   private disableStartButton: boolean = false;            // indicates if start button should be displayed
   private disableStopButton: boolean = true;              // indicates if stop button should be dispalyed
