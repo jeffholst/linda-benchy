@@ -143,8 +143,7 @@ export default {
       this.selectedScale = newValue;
       if ( this.selectedScale === '1' || this.selectedScale === '2' ) {
         this.startingReps = 10;
-      }
-      else {
+      } else {
         this.startingReps = 8;
       }
     },
