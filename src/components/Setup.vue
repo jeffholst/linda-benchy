@@ -1,14 +1,14 @@
 <template>
-  <v-container grid-list-md>
-    <v-layout column>
-      <v-layout row>
-        <v-flex xs6>
-          <v-text-field 
-            type="number"
-            v-model="weight"
-            label="Body Weight"
-            required
-            v-on:change="recalculate"></v-text-field>
+  <v-container grid-list-md fluid>
+    <v-layout row>
+      <v-flex xs6>
+        <v-text-field 
+          type="number"
+          v-model="weight"
+          label="Enter body weight"
+          placeholder=" "
+          required
+          v-on:change="recalculate"></v-text-field>
         </v-flex>
         <v-flex xs6>
           <v-select
@@ -16,7 +16,7 @@
             item-text="text"
             item-value="value"
             v-model="selectedScale"
-            label="Scale"
+            label="Select scale"
             v-on:change="changeScale"
           ></v-select>
         </v-flex>
@@ -25,7 +25,7 @@
          <v-flex xs4>
           <v-card dark color="primary"> 
             <v-card-title primary-title class="justify-center" >
-                <h4 class="text-uppercase">Deadlift</h4>
+                <h4 class="text-uppercase">Dead</h4>
                  <v-text-field 
                     v-bind:class="buttonTextSize"
                     type="number"
@@ -62,30 +62,17 @@
           </v-card>
         </v-flex>
       </v-layout>
-    </v-layout>
-    <v-layout row style="padding-top: 0px;">
-      <v-flex>
-        <v-card >
-          <v-card-title primary-title>
-            <div>
-              <div class="headline">Instructions</div>
-              <ol>
-                <li>Enter your body weight</li>
-                <li>Select workout scale</li>
-                <li>Modify weights if necessary</li>
-                <li class="hidden-sm-and-down">Setup 3 bars</li>
-              </ol>
-            </div>
-          </v-card-title>
-          <v-card-actions>
-            <v-btn 
-              flat color="orange"
-              @click="setupComplete">
-              Continue to Workout
-            </v-btn>
-        </v-card-actions>
-        </v-card>
-      </v-flex>
+    <v-layout row style="padding-top: 40px;" justify-center>
+   
+        <div class="text-xs-center">
+        <v-btn
+          class="white--text"
+          :disabled="disableContinueButton"
+          round
+          color="orange"
+          @click="setupComplete">Continue to Workout
+        </v-btn>
+      </div>
     </v-layout>
   </v-container>
 </template>
@@ -95,10 +82,11 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 
 @Component
 export default class Control extends Vue {
+  private disableContinueButton: boolean = true;
   private deadliftWeight: number = 0;
   private benchWeight: number = 0;
   private cleanWeight: number = 0;
-  private weight: number = 0;
+  private weight: string = '';
   private selectedScale: string = '1';
   private scaleItems: any = [
     { text: 'Rx', value: '1' },
@@ -108,7 +96,6 @@ export default class Control extends Vue {
 
   constructor() {
     super();
-    this.recalculate();
   }
 
   private get buttonTextSize() {
@@ -116,16 +103,18 @@ export default class Control extends Vue {
 
     switch (this.$vuetify.breakpoint.name) {
         case 'xs':
-        case 'sm': rval = "headline";
-        break;
-        case 'md': 
+        case 'sm':
+          rval = 'subheading';
+          break;
+        case 'md':
         case 'lg':
-        case 'xl': 
-        default: rval = "display-1";
-        break;
+        case 'xl':
+        default:
+          rval = 'display-1';
+          break;
       }
 
-      return(rval);
+    return(rval);
   }
 
   private changeScale(newItem: string) {
@@ -138,6 +127,10 @@ export default class Control extends Vue {
     let deadliftMultiplier = 1;
     let benchMultiplier = 1;
     let cleanMultiplier = 1;
+
+    if (this.weight) {
+      this.disableContinueButton = false;
+    }
 
     if ( this.selectedScale === '1') {
       deadliftMultiplier = 1.5;
@@ -153,9 +146,9 @@ export default class Control extends Vue {
       cleanMultiplier = .33;
     }
 
-    this.deadliftWeight = Math.round(this.weight * deadliftMultiplier);
-    this.benchWeight = Math.round(this.weight * benchMultiplier);
-    this.cleanWeight = Math.round(this.weight * cleanMultiplier);
+    this.deadliftWeight = Math.round(parseInt(this.weight, 10) * deadliftMultiplier);
+    this.benchWeight = Math.round(parseInt(this.weight, 10) * benchMultiplier);
+    this.cleanWeight = Math.round(parseInt(this.weight, 10) * cleanMultiplier);
   }
 
   private setupComplete() {

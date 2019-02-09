@@ -23,7 +23,6 @@
       <v-flex xs12 class="text-xs-center"> 
         <v-btn
           round
-          large
           color="orange"
           class="white--text"
           @click="resetApp"

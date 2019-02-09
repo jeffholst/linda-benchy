@@ -1,110 +1,64 @@
 <template>
   <v-container grid-list-md>
-    <v-layout column>
-      <v-layout row>
-        <v-flex text-xs-center text-xs-display-1 style="padding-top: 0px;">
-          Round 1 of 10
-        </v-flex>
-      </v-layout>
-        <v-layout row text-xs-center>
-        <v-flex xs4>
-          <v-btn
-            small
-            color="blue"
-            class="hidden-sm-and-up white--text"
-          >{{buttonNameDeadlift}}
-          </v-btn>
-           <v-btn
-            large
-            color="blue"
-            class="hidden-xs-only white--text"
-          >{{buttonNameDeadlift}}
-          </v-btn>
-        </v-flex>
-        <v-flex xs4>
-           <v-btn
-            small
-            color="blue"
-            class="hidden-sm-and-up white--text"
-          >{{buttonNameBenchpress}}
-          </v-btn>
-           <v-btn
-            large
-            color="blue"
-            class="hidden-xs-only white--text"
-          >{{buttonNameBenchpress}}
-          </v-btn>
-        </v-flex>
-        <v-flex xs4>
-          <v-btn
-            small
-            color="blue"
-            class="hidden-sm-and-up white--text"
-          >{{buttonNameClean}}
-          </v-btn>
-           <v-btn
-            large
-            color="blue"
-            class="hidden-xs-only white--text"
-          >{{buttonNameClean}}
-          </v-btn>
-        </v-flex>
-      </v-layout>
-      <v-layout row>
-        <v-flex text-xs-center text-xs-display-1 style="padding-top: 0px;">
-          <div class="hidden-sm-and-up font-weight-black display-3">{{timerDisplay}}</div>
-          <div class="hidden-xs-only font-weight-black display-4">{{timerDisplay}}</div>
-        </v-flex>
-      </v-layout>
-      <v-layout row>
-        <v-flex text-xs-center text-xs-display-1 style="padding-top: 0px;">
-          <v-btn 
-            v-if="!disableStartButton"
-            round
-            large
-            color="green"
-            class="white--text"
-            @click="startTimer();"
-          >{{startButtonText}}&nbsp;
-            <v-icon>timer</v-icon>
-          </v-btn>
-          <v-btn
-            v-if="!disableStopButton"
-            round
-            large
-            color="red"
-            class="white--text"
-            @click="stopTimer();"
-          >Stop&nbsp;
-            <v-icon>stop</v-icon>
-          </v-btn>
-          <v-btn
-            v-if="!disablePauseButton"
-            round
-            large
-            color="blue"
-            class="white--text"
-            @click="pauseTimer();"
-          >Pause&nbsp;
-            <v-icon>pause_circle_outline</v-icon>
-          </v-btn>
-        </v-flex>
-      </v-layout>
+    <v-layout row>
+      <v-flex text-xs-center text-xs-display-1 style="padding-top: 0px;">Round 1 of 10</v-flex>
     </v-layout>
-    <v-layout row style="padding-top: 10px;">
-      <v-flex>
-        <v-card >
-          <v-card-title primary-title>
-            <div>
-              <div class="headline">Instructions</div>
-              <ol>
-                <li>Start timer</li>
-                <li>Click lift buttons after completion</li>
-                <li>Click stop when finished</li>
-              </ol>
-            </div>
-          </v-card-title>
-        </v-card>
+    <v-layout row text-xs-center>
+      <v-flex xs4>
+        <v-btn fab small color="blue" class="hidden-sm-and-up white--text">
+          <v-icon>done_outline</v-icon>
+        </v-btn>
+        <v-btn large color="blue" class="hidden-xs-only white--text">{{buttonNameDeadlift}}</v-btn>
+      </v-flex>
+      <v-flex xs4>
+        <v-btn fab small color="blue" class="hidden-sm-and-up white--text">
+          <v-icon>done_outline</v-icon>
+        </v-btn>
+        <v-btn large color="blue" class="hidden-xs-only white--text">{{buttonNameBenchpress}}</v-btn>
+      </v-flex>
+      <v-flex xs4>
+        <v-btn fab small color="blue" class="hidden-sm-and-up white--text">
+          <v-icon>done_outline</v-icon>
+        </v-btn>
+        <v-btn large color="blue" class="hidden-xs-only white--text">{{buttonNameClean}}</v-btn>
+      </v-flex>
+    </v-layout>
+    <v-layout row>
+      <v-flex text-xs-center text-xs-display-1 style="padding-top: 20px;">
+        <div class="hidden-sm-and-up font-weight-black display-3">{{timerDisplay}}</div>
+        <div class="hidden-xs-only font-weight-black display-4">{{timerDisplay}}</div>
+      </v-flex>
+    </v-layout>
+    <v-layout row>
+      <v-flex text-xs-center text-xs-display-1 style="padding-top: 30px;">
+        <v-btn
+          v-if="!disableStartButton"
+          round
+          color="green"
+          class="white--text"
+          @click="startTimer();"
+        >
+          {{startButtonText}}&nbsp;
+          <v-icon>timer</v-icon>
+        </v-btn>
+        <v-btn
+          v-if="!disableStopButton"
+          round
+          color="red"
+          class="white--text"
+          @click="stopTimer();"
+        >Stop&nbsp;
+          <v-icon>stop</v-icon>
+        </v-btn>
+        <v-btn
+          v-if="!disablePauseButton"
+          round
+          color="blue"
+          class="white--text"
+          @click="pauseTimer();"
+        >Pause&nbsp;
+          <v-icon>pause_circle_outline</v-icon>
+        </v-btn>
       </v-flex>
     </v-layout>
   </v-container>
@@ -123,19 +77,19 @@ enum TimerStatus {
 export default class Control extends Vue {
   @Prop() private selectedScale!: string;
 
-  private buttonNameDeadlift: string = 'Deadlift';        // display name for deadlift button
-  private buttonNameBenchpress: string = 'Bench';         // display name for bench press button
-  private buttonNameClean: string = 'Clean';              // display name for clean button
-  private disablePauseButton: boolean = true;             // indicates if pause button should be displayed
-  private disableStartButton: boolean = false;            // indicates if start button should be displayed
-  private disableStopButton: boolean = true;              // indicates if stop button should be dispalyed
-  private startButtonText: string = 'START';              // text displayed on the start/continue button
-  private timer: number = 0;                              // setInterval timer
-  private timerDisplay: string = '00:00:00';              // the timer display the user sees
-  private timerPausedTime: number = 0;                    // time timer has been paused in seconds
-  private timerStartTime: number = 0;                     // timer start time, millisecs since JAN-01-1970
+  private buttonNameDeadlift: string = 'Deadlift'; // display name for deadlift button
+  private buttonNameBenchpress: string = 'Bench'; // display name for bench press button
+  private buttonNameClean: string = 'Clean'; // display name for clean button
+  private disablePauseButton: boolean = true; // indicates if pause button should be displayed
+  private disableStartButton: boolean = false; // indicates if start button should be displayed
+  private disableStopButton: boolean = true; // indicates if stop button should be dispalyed
+  private startButtonText: string = 'START'; // text displayed on the start/continue button
+  private timer: number = 0; // setInterval timer
+  private timerDisplay: string = '00:00:00'; // the timer display the user sees
+  private timerPausedTime: number = 0; // time timer has been paused in seconds
+  private timerStartTime: number = 0; // timer start time, millisecs since JAN-01-1970
   private timerStatus: TimerStatus = TimerStatus.Stopped; // status of the timer
-  private totalSeconds: number = 0;                       // total seconds timer has been going without pauses
+  private totalSeconds: number = 0; // total seconds timer has been going without pauses
 
   private updateTimer() {
     /*
@@ -161,7 +115,9 @@ export default class Control extends Vue {
       return timer display and update totalSeconds
     */
     const d: Date = new Date();
-    this.totalSeconds = Math.floor((d.getTime() - this.timerStartTime) / 1000) - this.timerPausedTime;
+    this.totalSeconds =
+      Math.floor((d.getTime() - this.timerStartTime) / 1000) -
+      this.timerPausedTime;
     return `${this.GetHours()}:${this.GetMinutes()}:${this.GetSeconds()}`;
   }
 
@@ -200,7 +156,7 @@ export default class Control extends Vue {
       // start noSleep operation, keeps PWAs from going to sleep while timer is going
       this.$emit('start-timer');
       const d = new Date();
-      this.timerStartTime = d.getTime();  // get the current number of milliseconds since Jan 1 1970
+      this.timerStartTime = d.getTime(); // get the current number of milliseconds since Jan 1 1970
     }
     this.timerStatus = TimerStatus.Running;
     this.disableStartButton = true;

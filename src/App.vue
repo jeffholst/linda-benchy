@@ -11,76 +11,82 @@
       </v-btn>
     </v-toolbar>
     <v-content>
-      <v-stepper v-model="stepCompleted">
-        <v-stepper-header>
-          <v-stepper-step :complete="stepCompleted > 1" step="1">Setup</v-stepper-step>
+      <v-container fluid fill-height>
+        <v-layout>
+          <v-flex>
+            <v-stepper v-model="stepCompleted" style="height: 100%">
+              <v-stepper-header>
+                <v-stepper-step :complete="stepCompleted > 1" step="1">Setup</v-stepper-step>
 
-          <v-divider></v-divider>
+                <v-divider></v-divider>
 
-          <v-stepper-step :complete="stepCompleted > 2" step="2">Workout</v-stepper-step>
+                <v-stepper-step :complete="stepCompleted > 2" step="2">Workout</v-stepper-step>
 
-          <v-divider></v-divider>
+                <v-divider></v-divider>
 
-          <v-stepper-step :complete="stepCompleted > 2" step="3">Results</v-stepper-step>
-        </v-stepper-header>
+                <v-stepper-step :complete="stepCompleted > 2" step="3">Results</v-stepper-step>
+              </v-stepper-header>
 
-        <v-stepper-items>
-          <v-stepper-content step="1">
-            <Setup @scale-changed="selectedScaleChanged" @setup-complete="setupComplete"/>
-          </v-stepper-content>
+              <v-stepper-items>
+                <v-stepper-content step="1">
+                  <Setup @scale-changed="selectedScaleChanged" @setup-complete="setupComplete"/>
+                </v-stepper-content>
 
-          <v-stepper-content step="2">
-            <Workout @start-timer="timerStarted" @stop-timer="timerStopped" v-bind:selectedScale="selectedScale" @workout-complete="workoutComplete"/>
-          </v-stepper-content>
+                <v-stepper-content step="2">
+                  <Workout @start-timer="timerStarted" @stop-timer="timerStopped" v-bind:selectedScale="selectedScale" @workout-complete="workoutComplete"/>
+                </v-stepper-content>
 
-          <v-stepper-content step="3">
-            <Results @reset-app="resetApp" v-bind:timerDisplay="timerDisplay" />
-          </v-stepper-content>
-        </v-stepper-items>
-      </v-stepper>
-      <v-dialog v-model="aboutDialog" scrollable max-width="300px">
-        <v-card>
-          <v-card-title class="text-uppercase">Linda WOD</v-card-title>
-          <v-divider></v-divider>
-          <v-card-text style="height: 300px;">
-            <p>
-              <strong>Reference: </strong><a href= "https://www.crossfit.com/workout/2018/05/26#/">CrossFit Linda</a>
-            </p>
-            <p>10-9-8-7-6-5-4-3-2-1 Reps, For Time<br>
-            Deadlift (1½ body weight)<br>
-            Bench Press (body weight)<br>
-            Clean (¾ bodyweight)<br>
-            </p>
-            <p>Set up three bars and storm through for time.</p>
-            <p>See below for scaling options.</p>
-            <v-divider/>
-            <div>&nbsp;</div>
-            <h3>Scaling</h3>
-            <div>&nbsp;</div>
-            <h4>Intermediate</h4>
-            <div>10-9-8-7-6-5-4-3-2-1 reps for time of:</div>
-            <div>Deadlift (1¼-body weight)</div>
-            <div>Bench Press (¾ body weight)</div>
-            <div>Clean (½ body weight)</div>
-            <div>&nbsp;</div>
-            <h4>Beginner</h4>
-            <div>8-7-6-5-4-3-2-1 reps for time of:</div>
-            <div>Deadlift (¾ body weight)</div>
-            <div>Bench Press (½ body weight)</div>
-            <div>Clean (⅓ body weight)</div>
-            <div>&nbsp;</div>
-            <v-divider/>
-            <div>&nbsp;</div>
-            <div>LINDA WOD</div>
-            <div>By: Jeff Holst</div>
-            <div>Version: {{myVersion}}</div>
-          </v-card-text>
-          <v-divider></v-divider>
-          <v-card-actions>
-            <v-btn color="blue darken-1" flat @click="aboutDialog = false">Close</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
+                <v-stepper-content step="3">
+                  <Results @reset-app="resetApp" v-bind:timerDisplay="timerDisplay" />
+                </v-stepper-content>
+              </v-stepper-items>
+            </v-stepper>
+            <v-dialog v-model="aboutDialog" scrollable max-width="300px">
+              <v-card>
+                <v-card-title class="text-uppercase">Linda WOD</v-card-title>
+                <v-divider></v-divider>
+                <v-card-text style="height: 300px;">
+                  <p>
+                    <strong>Reference: </strong><a href= "https://www.crossfit.com/workout/2018/05/26#/">CrossFit Linda</a>
+                  </p>
+                  <p>10-9-8-7-6-5-4-3-2-1 Reps, For Time<br>
+                  Deadlift (1½ body weight)<br>
+                  Bench Press (body weight)<br>
+                  Clean (¾ bodyweight)<br>
+                  </p>
+                  <p>Set up three bars and storm through for time.</p>
+                  <p>See below for scaling options.</p>
+                  <v-divider/>
+                  <div>&nbsp;</div>
+                  <h3>Scaling</h3>
+                  <div>&nbsp;</div>
+                  <h4>Intermediate</h4>
+                  <div>10-9-8-7-6-5-4-3-2-1 reps for time of:</div>
+                  <div>Deadlift (1¼-body weight)</div>
+                  <div>Bench Press (¾ body weight)</div>
+                  <div>Clean (½ body weight)</div>
+                  <div>&nbsp;</div>
+                  <h4>Beginner</h4>
+                  <div>8-7-6-5-4-3-2-1 reps for time of:</div>
+                  <div>Deadlift (¾ body weight)</div>
+                  <div>Bench Press (½ body weight)</div>
+                  <div>Clean (⅓ body weight)</div>
+                  <div>&nbsp;</div>
+                  <v-divider/>
+                  <div>&nbsp;</div>
+                  <div>LINDA WOD</div>
+                  <div>By: Jeff Holst</div>
+                  <div>Version: {{myVersion}}</div>
+                </v-card-text>
+                <v-divider></v-divider>
+                <v-card-actions>
+                  <v-btn color="blue darken-1" flat @click="aboutDialog = false">Close</v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
+          </v-flex>
+        </v-layout>
+      </v-container>
     </v-content>
   </v-app>
 </template>
