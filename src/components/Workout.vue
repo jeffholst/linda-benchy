@@ -1,36 +1,86 @@
 <template>
   <v-container grid-list-md>
     <v-layout row>
-      <v-flex text-xs-center text-xs-display-1 style="padding-top: 0px;">Round 1 of 10</v-flex>
+      <v-flex text-xs-center headline style="padding-top: 0px;">{{startingReps}} REPS EACH</v-flex>
     </v-layout>
     <v-layout row text-xs-center>
       <v-flex xs4>
-        <v-btn fab small color="blue" class="hidden-sm-and-up white--text">
+        <div>Dead</div>
+        <div>{{deadWeight}}</div>
+        <v-btn 
+          fab 
+          small 
+          color="blue" 
+          class="hidden-sm-and-up white--text"
+          @click="finishDead();"
+          :disabled="disableDeadButton"
+          >
           <v-icon>done_outline</v-icon>
         </v-btn>
-        <v-btn large color="blue" class="hidden-xs-only white--text">{{buttonNameDeadlift}}</v-btn>
+        <v-btn 
+          fab 
+          color="blue" 
+          class="hidden-xs-only white--text"
+          @click="finishDead();"
+          :disabled="disableDeadButton"
+          >
+          <v-icon>done_outline</v-icon>
+        </v-btn>
       </v-flex>
       <v-flex xs4>
-        <v-btn fab small color="blue" class="hidden-sm-and-up white--text">
+        <div>Bench</div>
+        <div>{{benchWeight}}</div>
+        <v-btn 
+          fab 
+          small 
+          color="blue" 
+          class="hidden-sm-and-up white--text"
+          @click="finishBench();"
+          :disabled="disableBenchButton"
+          >
           <v-icon>done_outline</v-icon>
         </v-btn>
-        <v-btn large color="blue" class="hidden-xs-only white--text">{{buttonNameBenchpress}}</v-btn>
+        <v-btn 
+          fab color="blue" 
+          class="hidden-xs-only white--text"
+          @click="finishBench();"
+          :disabled="disableBenchButton"
+          >
+          <v-icon>done_outline</v-icon>
+        </v-btn>
       </v-flex>
       <v-flex xs4>
-        <v-btn fab small color="blue" class="hidden-sm-and-up white--text">
+        <div>Clean</div>
+        <div>{{cleanWeight}}</div>
+        <v-btn 
+          fab 
+          small 
+          color="blue" 
+          class="hidden-sm-and-up white--text"
+          @click="finishClean();"
+          :disabled="disableCleanButton"
+          >
           <v-icon>done_outline</v-icon>
         </v-btn>
-        <v-btn large color="blue" class="hidden-xs-only white--text">{{buttonNameClean}}</v-btn>
+        <v-btn 
+          fab 
+          color="blue" 
+          class="hidden-xs-only white--text"
+          @click="finishClean();"
+          :disabled="disableCleanButton"
+          >
+          <v-icon>done_outline</v-icon>
+        </v-btn>
       </v-flex>
     </v-layout>
     <v-layout row>
-      <v-flex text-xs-center text-xs-display-1 style="padding-top: 20px;">
+      <v-flex text-xs-center text-xs-display-1 style="padding-top: 10px;">
         <div class="hidden-sm-and-up font-weight-black display-3">{{timerDisplay}}</div>
         <div class="hidden-xs-only font-weight-black display-4">{{timerDisplay}}</div>
       </v-flex>
     </v-layout>
     <v-layout row>
-      <v-flex text-xs-center text-xs-display-1 style="padding-top: 30px;">
+      <v-flex text-xs-center text-xs-display-1 style="padding-top: 10px;">
         <v-btn
           v-if="!disableStartButton"
           round
@@ -76,10 +126,14 @@ enum TimerStatus {
 @Component
 export default class Control extends Vue {
   @Prop() private selectedScale!: string;
+  @Prop() private startingReps!: number;
+  @Prop() private deadWeight!: number;
+  @Prop() private benchWeight!: number;
+  @Prop() private cleanWeight!: number;
 
-  private buttonNameDeadlift: string = 'Deadlift'; // display name for deadlift button
-  private buttonNameBenchpress: string = 'Bench'; // display name for bench press button
-  private buttonNameClean: string = 'Clean'; // display name for clean button
+  private buttonDeadClicked: boolean = false;
+  private buttonBenchClicked: boolean = false;
+  private buttonCleanClicked: boolean = false;
   private disablePauseButton: boolean = true; // indicates if pause button should be displayed
   private disableStartButton: boolean = false; // indicates if start button should be displayed
   private disableStopButton: boolean = true; // indicates if stop button should be dispalyed
@@ -90,6 +144,22 @@ export default class Control extends Vue {
   private timerStartTime: number = 0; // timer start time, millisecs since JAN-01-1970
   private timerStatus: TimerStatus = TimerStatus.Stopped; // status of the timer
   private totalSeconds: number = 0; // total seconds timer has been going without pauses
+
+  private get disableDeadButton() {
+    const rval: boolean = this.buttonDeadClicked || this.timerStatus !== TimerStatus.Running;
+    return rval;
+  }
+
+  private get disableBenchButton() {
+    const rval: boolean = this.buttonBenchClicked || this.timerStatus !== TimerStatus.Running;
+    return rval;
+  }
+
+  private get disableCleanButton() {
+    const rval: boolean = this.buttonCleanClicked || this.timerStatus !== TimerStatus.Running;
+    return rval;
+  }
+
 
   private updateTimer() {
     /*
@@ -176,9 +246,13 @@ export default class Control extends Vue {
     this.disableStopButton = true;
     this.disablePauseButton = true;
     this.timerPausedTime = 0;
+    this.buttonDeadClicked = false;
+    this.buttonBenchClicked = false;
+    this.buttonCleanClicked = false;
     // cancel noSleep operation
     this.$emit('stop-timer');
     this.workoutComplete();
+    this.timerDisplay = '00:00:00';
   }
 
   private pauseTimer() {
@@ -198,6 +272,29 @@ export default class Control extends Vue {
       workout finished
     */
     this.$emit('workout-complete', this.timerDisplay); // finished workout
+  }
+
+  private finishDead() {
+    this.buttonDeadClicked = true;
+    this.checkForRoundComplete();
+  }
+
+  private finishBench() {
+    this.buttonBenchClicked = true;
+    this.checkForRoundComplete();
+  }
+
+  private finishClean() {
+    this.buttonCleanClicked = true;
+    this.checkForRoundComplete();
+  }
+
+  private checkForRoundComplete() {
+    if ( this.buttonDeadClicked && this.buttonBenchClicked && this.buttonCleanClicked ) {
+      this.buttonDeadClicked = false;
+      this.buttonBenchClicked = false;
+      this.buttonCleanClicked = false;
+    }
   }
 }
 </script>

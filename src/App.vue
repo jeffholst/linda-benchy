@@ -29,15 +29,30 @@
 
               <v-stepper-items>
                 <v-stepper-content step="1">
-                  <Setup @scale-changed="selectedScaleChanged" @setup-complete="setupComplete"/>
+                  <Setup 
+                    @scale-changed="selectedScaleChanged"
+                    @setup-complete="setupComplete"
+                  />
                 </v-stepper-content>
 
                 <v-stepper-content step="2">
-                  <Workout @start-timer="timerStarted" @stop-timer="timerStopped" v-bind:selectedScale="selectedScale" @workout-complete="workoutComplete"/>
+                  <Workout 
+                    @start-timer="timerStarted" 
+                    @stop-timer="timerStopped"
+                    @workout-complete="workoutComplete"
+                    v-bind:selectedScale="selectedScale" 
+                    v-bind:startingReps="startingReps" 
+                    v-bind:deadWeight="deadWeight"
+                    v-bind:benchWeight="benchWeight"
+                    v-bind:cleanWeight="cleanWeight"
+                  />
                 </v-stepper-content>
 
                 <v-stepper-content step="3">
-                  <Results @reset-app="resetApp" v-bind:timerDisplay="timerDisplay" />
+                  <Results 
+                    @reset-app="resetApp"
+                    v-bind:timerDisplay="timerDisplay"
+                  />
                 </v-stepper-content>
               </v-stepper-items>
             </v-stepper>
@@ -126,9 +141,18 @@ export default {
     },
     selectedScaleChanged(newValue) {
       this.selectedScale = newValue;
+      if ( this.selectedScale === '1' || this.selectedScale === '2' ) {
+        this.startingReps = 10;
+      }
+      else {
+        this.startingReps = 8;
+      }
     },
-    setupComplete() {
+    setupComplete(deadWeight, benchWeight, cleanWeight) {
       this.stepCompleted = 2;
+      this.deadWeight = deadWeight;
+      this.benchWeight = benchWeight;
+      this.cleanWeight = cleanWeight;
     },
     workoutComplete(workoutTime) {
       this.stepCompleted = 3;
@@ -140,11 +164,15 @@ export default {
   },
   data() {
     return {
+      startingReps: 10,
       stepCompleted: 0,
       aboutDialog: false,
       myVersion: version,
-      selectedScale: '1',
+      selectedScale: '1',   // 1=Rx, 2=Intermediate, 3=Beginner
       timerDisplay: '',
+      deadWeight: 0,
+      benchWeight: 0,
+      cleanWeight: 0,
     };
   },
 };

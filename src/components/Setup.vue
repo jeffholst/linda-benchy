@@ -155,7 +155,7 @@ export default class Control extends Vue {
     /*
       setup complete
     */
-    this.$emit('setup-complete'); // finished setup
+    this.$emit('setup-complete', this.deadliftWeight, this.benchWeight, this.cleanWeight); // finished setup
   }
 }
 </script>
