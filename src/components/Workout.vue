@@ -1,7 +1,7 @@
 <template>
   <v-container grid-list-md>
     <v-layout row>
-      <v-flex text-xs-center headline style="padding-top: 0px;">{{startingReps}} REPS EACH</v-flex>
+      <v-flex text-xs-center headline style="padding-top: 0px;">{{startingReps - roundsComplete}} REPS EACH</v-flex>
     </v-layout>
     <v-layout row text-xs-center>
       <v-flex xs4>
@@ -134,10 +134,12 @@ export default class Control extends Vue {
   private buttonDeadClicked: boolean = false;
   private buttonBenchClicked: boolean = false;
   private buttonCleanClicked: boolean = false;
+  private currentReps: number = this.startingReps;
   private disablePauseButton: boolean = true; // indicates if pause button should be displayed
   private disableStartButton: boolean = false; // indicates if start button should be displayed
   private disableStopButton: boolean = true; // indicates if stop button should be dispalyed
   private startButtonText: string = 'START'; // text displayed on the start/continue button
+  private roundsComplete: number = 0;
   private timer: number = 0; // setInterval timer
   private timerDisplay: string = '00:00:00'; // the timer display the user sees
   private timerPausedTime: number = 0; // time timer has been paused in seconds
@@ -249,6 +251,7 @@ export default class Control extends Vue {
     this.buttonDeadClicked = false;
     this.buttonBenchClicked = false;
     this.buttonCleanClicked = false;
+    this.roundsComplete = 0;
     // cancel noSleep operation
     this.$emit('stop-timer');
     this.workoutComplete();
@@ -294,6 +297,11 @@ export default class Control extends Vue {
       this.buttonDeadClicked = false;
       this.buttonBenchClicked = false;
       this.buttonCleanClicked = false;
+      this.roundsComplete++;
+
+      if ( this.roundsComplete === this.startingReps ) {
+        this.stopTimer();
+      }
     }
   }
 }
