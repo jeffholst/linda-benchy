@@ -279,16 +279,19 @@ export default class Control extends Vue {
 
   private finishDead() {
     this.buttonDeadClicked = true;
+    this.$emit('lift-complete', 1, this.startingReps - this.roundsComplete, this.totalSeconds); 
     this.checkForRoundComplete();
   }
 
   private finishBench() {
     this.buttonBenchClicked = true;
+    this.$emit('lift-complete', 2, this.startingReps - this.roundsComplete, this.totalSeconds); 
     this.checkForRoundComplete();
   }
 
   private finishClean() {
     this.buttonCleanClicked = true;
+    this.$emit('lift-complete', 3, this.startingReps - this.roundsComplete, this.totalSeconds); 
     this.checkForRoundComplete();
   }
 

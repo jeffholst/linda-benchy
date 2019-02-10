@@ -40,6 +40,7 @@
                     @start-timer="timerStarted" 
                     @stop-timer="timerStopped"
                     @workout-complete="workoutComplete"
+                    @lift-complete="liftComplete"
                     v-bind:selectedScale="selectedScale" 
                     v-bind:startingReps="startingReps" 
                     v-bind:deadWeight="deadWeight"
@@ -159,6 +160,9 @@ export default {
     },
     resetApp() {
       this.stepCompleted = 1;
+    },
+    liftComplete(lift, reps, timestamp) {
+      console.log(`lift = ${lift}, reps = ${reps}, timestamp = ${timestamp}`);
     },
   },
   data() {
