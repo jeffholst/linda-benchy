@@ -8,7 +8,7 @@
     <table class="result-table tiny-table">
       <thead>
         <tr>
-          <th class="first-column"></th>
+          <th class="first-column">Reps</th>
           <th>Dead</th>
           <th>Bench</th>
           <th>Clean</th>
@@ -17,11 +17,11 @@
       </thead>
       <tbody>
         <tr v-for="round in repScheme" :key="round">
-          <td class="first-column">{{round}}</td>
-          <td>01:02</td>
-          <td>02:02</td>
-          <td>03:02</td>
-          <td>01:04:02</td>
+          <td class="first-column">{{round | padZero}}</td>
+          <td>{{deadTimeAry[round -1] | formatLift}}</td>
+          <td>{{benchTimeAry[round -1] | formatLift}}</td>
+          <td>{{cleanTimeAry[round -1] | formatLift}}</td>
+          <td>{{totalTimeAry[round -1] | formatTotal}}</td>
         </tr>
       </tbody>
     </table>
@@ -42,9 +42,39 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 
-@Component
+@Component({
+  filters: {
+    padZero(value: number) {
+      return ('0' + value).slice(-2);
+    },
+    formatLift(value: any) {
+      const seconds: number = value % 60;
+      const minutes: number = Math.trunc((value / 60)) % 60;
+
+      const minutesPadded = ('0' + minutes).slice(-2);
+      const secondsPadded = ('0' + seconds).slice(-2);
+      
+      return(`${minutesPadded}:${secondsPadded}`);
+    },
+    formatTotal(value: any) {
+      const seconds: number = value % 60;
+      const minutes: number = Math.trunc((value / 60)) % 60;
+      const hours: number = Math.trunc((value / 60 / 60)) % 60;
+
+      const hoursPadded = ('0' + hours).slice(-2);
+      const minutesPadded = ('0' + minutes).slice(-2);
+      const secondsPadded = ('0' + seconds).slice(-2);
+      
+      return(`${hoursPadded}:${minutesPadded}:${secondsPadded}`);
+    },
+  },
+})
 export default class Control extends Vue {
   @Prop() private timerDisplay!: string;
+  @Prop() private deadTimeAry!: any;
+  @Prop() private benchTimeAry!: any;
+  @Prop() private cleanTimeAry!: any;
+  @Prop() private totalTimeAry!: any;
 
   private repScheme: number[] = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1 ];
 
@@ -79,7 +109,7 @@ export default class Control extends Vue {
 }
 
 .first-column {
-  width: 30px;
+  width: 40px;
 }
 
 .tiny-table {

@@ -37,10 +37,10 @@
 
                 <v-stepper-content step="2">
                   <Workout 
-                    @start-timer="timerStarted" 
-                    @stop-timer="timerStopped"
-                    @workout-complete="workoutComplete"
-                    @lift-complete="liftComplete"
+                    @start-timer="timer_started" 
+                    @stop-timer="timer_stopped"
+                    @workout-complete="workout_complete"
+                    @lift-complete="lift_complete"
                     v-bind:selectedScale="selectedScale" 
                     v-bind:startingReps="startingReps" 
                     v-bind:deadWeight="deadWeight"
@@ -53,6 +53,10 @@
                   <Results 
                     @reset-app="resetApp"
                     v-bind:timerDisplay="timerDisplay"
+                    v-bind:deadTimeAry="deadTimeAry"
+                    v-bind:benchTimeAry="benchTimeAry"
+                    v-bind:cleanTimeAry="cleanTimeAry"
+                    v-bind:totalTimeAry="totalTimeAry"
                   />
                 </v-stepper-content>
               </v-stepper-items>
@@ -127,7 +131,7 @@ export default {
     aboutClicked() {
       this.aboutDialog = !this.aboutDialog;
     },
-    timerStarted(event, value) {
+    timer_started(event, value) {
       document.addEventListener(
         'click',
         function enableNoSleep() {
@@ -137,7 +141,7 @@ export default {
         false,
       );
     },
-    timerStopped(event, value) {
+    timer_stopped(event, value) {
       noSleep.disable();
     },
     selectedScaleChanged(newValue) {
@@ -154,15 +158,37 @@ export default {
       this.benchWeight = benchWeight;
       this.cleanWeight = cleanWeight;
     },
-    workoutComplete(workoutTime) {
+    workout_complete(workoutTime) {
       this.stepCompleted = 3;
       this.timerDisplay = workoutTime;
     },
     resetApp() {
       this.stepCompleted = 1;
+      this.liftComplete = 0;
+      this.lastTime = 0;
+      this.resetTimeVariables();
     },
-    liftComplete(lift, reps, timestamp) {
+    resetTimeVariables() {
+      for (let loop = 0; loop < 10; loop++) {
+        this.deadTimeAry[loop] = 0;
+        this.benchTimeAry[loop] = 0;
+        this.cleanTimeAry[loop] = 0;
+        this.totalTimeAry[loop] = 0;
+      }
+    },
+    lift_complete(lift, reps, timestamp) {
       // console.log(`lift = ${lift}, reps = ${reps}, timestamp = ${timestamp}`);
+      const liftDuration = timestamp - this.lastTime;
+      if ( lift === 1 ) {
+        this.deadTimeAry[reps - 1] = liftDuration;
+      } else if ( lift === 2 ) {
+        this.benchTimeAry[reps - 1] = liftDuration;
+      } else {
+        this.cleanTimeAry[reps - 1] = liftDuration;
+      }
+
+      this.lastTime = timestamp;
+      this.totalTimeAry[reps - 1] += liftDuration;
     },
   },
   data() {
@@ -176,7 +202,16 @@ export default {
       deadWeight: 0,
       benchWeight: 0,
       cleanWeight: 0,
+      lastTime: 0,
+      // Following need to be in a configuration / reset function
+      deadTimeAry: [],
+      benchTimeAry: [],
+      cleanTimeAry: [],
+      totalTimeAry: [],
     };
+  },
+  created() {
+    this.resetTimeVariables();
   },
 };
 </script>
