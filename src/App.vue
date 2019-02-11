@@ -6,8 +6,8 @@
         <span class="font-weight-light"> WOD</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn flat @click="aboutClicked">
-        <span class="mr-2">Help</span>
+      <v-btn flat icon @click="aboutClicked">
+        <v-icon>info</v-icon>
       </v-btn>
     </v-toolbar>
     <v-content>
@@ -162,7 +162,7 @@ export default {
       this.stepCompleted = 1;
     },
     liftComplete(lift, reps, timestamp) {
-      console.log(`lift = ${lift}, reps = ${reps}, timestamp = ${timestamp}`);
+      // console.log(`lift = ${lift}, reps = ${reps}, timestamp = ${timestamp}`);
     },
   },
   data() {
