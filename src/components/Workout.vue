@@ -6,21 +6,11 @@
     <v-layout row text-xs-center>
       <v-flex xs4>
         <div>Dead</div>
-        <div>{{deadWeight}}</div>
-        <v-btn 
-          fab 
-          small 
-          color="blue" 
-          class="hidden-sm-and-up white--text"
-          @click="finishDead();"
-          :disabled="disableDeadButton"
-          >
-          <v-icon>done_outline</v-icon>
-        </v-btn>
+        <div>{{deadWeight}} {{weightMeasurementLable}}</div>
         <v-btn 
           fab 
           color="blue" 
-          class="hidden-xs-only white--text"
+          class="white--text"
           @click="finishDead();"
           :disabled="disableDeadButton"
           >
@@ -29,20 +19,10 @@
       </v-flex>
       <v-flex xs4>
         <div>Bench</div>
-        <div>{{benchWeight}}</div>
-        <v-btn 
-          fab 
-          small 
-          color="blue" 
-          class="hidden-sm-and-up white--text"
-          @click="finishBench();"
-          :disabled="disableBenchButton"
-          >
-          <v-icon>done_outline</v-icon>
-        </v-btn>
+        <div>{{benchWeight}} {{weightMeasurementLable}}</div>
         <v-btn 
           fab color="blue" 
-          class="hidden-xs-only white--text"
+          class="white--text"
           @click="finishBench();"
           :disabled="disableBenchButton"
           >
@@ -51,21 +31,11 @@
       </v-flex>
       <v-flex xs4>
         <div>Clean</div>
-        <div>{{cleanWeight}}</div>
-        <v-btn 
-          fab 
-          small 
-          color="blue" 
-          class="hidden-sm-and-up white--text"
-          @click="finishClean();"
-          :disabled="disableCleanButton"
-          >
-          <v-icon>done_outline</v-icon>
-        </v-btn>
+        <div>{{cleanWeight}} {{weightMeasurementLable}}</div>
         <v-btn 
           fab 
           color="blue" 
-          class="hidden-xs-only white--text"
+          class="white--text"
           @click="finishClean();"
           :disabled="disableCleanButton"
           >
@@ -73,9 +43,15 @@
         </v-btn>
       </v-flex>
     </v-layout>
+    <v-layout row >
+      <v-flex text-xs-center header class="orange--text">
+        <div v-if="showClickTip">Click <v-icon small class="orange--text">done_outline</v-icon> when set complete</div>
+        <div v-else>&nbsp;</div>
+      </v-flex>
+    </v-layout>
     <v-layout row>
-      <v-flex text-xs-center text-xs-display-1 style="padding-top: 10px;">
-        <div class="hidden-sm-and-up font-weight-black display-3">{{timerDisplay}}</div>
+      <v-flex text-xs-center text-xs-display-1>
+        <div class="hidden-sm-and-up font-weight-black display-2">{{timerDisplay}}</div>
         <div class="hidden-xs-only font-weight-black display-4">{{timerDisplay}}</div>
       </v-flex>
     </v-layout>
@@ -83,6 +59,7 @@
       <v-flex text-xs-center text-xs-display-1 style="padding-top: 10px;">
         <v-btn
           v-if="!disableStartButton"
+          small
           round
           color="green"
           class="white--text"
@@ -93,6 +70,7 @@
         </v-btn>
         <v-btn
           v-if="!disableStopButton"
+          small
           round
           color="red"
           class="white--text"
@@ -102,6 +80,7 @@
         </v-btn>
         <v-btn
           v-if="!disablePauseButton"
+          small
           round
           color="blue"
           class="white--text"
@@ -130,6 +109,7 @@ export default class Control extends Vue {
   @Prop() private deadWeight!: number;
   @Prop() private benchWeight!: number;
   @Prop() private cleanWeight!: number;
+  @Prop() private weightMeasurementLable!: string;
 
   private buttonDeadClicked: boolean = false;
   private buttonBenchClicked: boolean = false;
@@ -138,6 +118,7 @@ export default class Control extends Vue {
   private disablePauseButton: boolean = true; // indicates if pause button should be displayed
   private disableStartButton: boolean = false; // indicates if start button should be displayed
   private disableStopButton: boolean = true; // indicates if stop button should be dispalyed
+  private showClickTip: boolean = false;
   private startButtonText: string = 'START'; // text displayed on the start/continue button
   private roundsComplete: number = 0;
   private timer: number = 0; // setInterval timer
@@ -229,6 +210,7 @@ export default class Control extends Vue {
       this.$emit('start-timer');
       const d = new Date();
       this.timerStartTime = d.getTime(); // get the current number of milliseconds since Jan 1 1970
+      this.showClickTip = true;
     }
     this.timerStatus = TimerStatus.Running;
     this.disableStartButton = true;
@@ -256,6 +238,7 @@ export default class Control extends Vue {
     this.$emit('stop-timer');
     this.workoutComplete();
     this.timerDisplay = '00:00:00';
+    this.showClickTip = false;
   }
 
   private pauseTimer() {
@@ -296,6 +279,7 @@ export default class Control extends Vue {
   }
 
   private checkForRoundComplete() {
+    this.showClickTip = false;
     if ( this.buttonDeadClicked && this.buttonBenchClicked && this.buttonCleanClicked ) {
       this.buttonDeadClicked = false;
       this.buttonBenchClicked = false;

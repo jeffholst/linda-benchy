@@ -1,5 +1,29 @@
 <template>
   <v-container grid-list-md fluid>
+    <v-layout row xs12>
+      <v-flex >
+        <div class="text-xs-center">
+            <v-btn-toggle v-model="weightMeasurement" mandatory>
+              <v-btn 
+                small
+                flat 
+                value="0"
+                @click="changeWeightMeasurement(0);"
+              >
+                lbs
+              </v-btn>
+              <v-btn 
+                small
+                flat
+                value="1"
+                @click="changeWeightMeasurement(1);"
+              >
+                kgs
+              </v-btn>
+            </v-btn-toggle>
+        </div>
+      </v-flex>
+    </v-layout>
     <v-layout row>
       <v-flex xs6>
         <v-text-field 
@@ -8,7 +32,9 @@
           label="Enter body weight"
           placeholder=" "
           required
-          v-on:keyup="recalculate"></v-text-field>
+          v-on:keyup="recalculate"
+          autofocus
+        ></v-text-field>
         </v-flex>
         <v-flex xs6>
           <v-select
@@ -62,7 +88,7 @@
           </v-card>
         </v-flex>
       </v-layout>
-    <v-layout row style="padding-top: 40px;" justify-center>
+    <v-layout row style="padding-top: 20px;" justify-center>
    
         <div class="text-xs-center">
         <v-btn
@@ -70,7 +96,10 @@
           :disabled="disableContinueButton"
           round
           color="orange"
-          @click="setupComplete">Continue to Workout
+          @click="setupComplete"
+          default
+        >
+        Continue to Workout
         </v-btn>
       </div>
     </v-layout>
@@ -79,6 +108,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
+import { directives } from 'vuetify/lib';
 
 @Component
 export default class Control extends Vue {
@@ -93,6 +123,7 @@ export default class Control extends Vue {
     { text: 'Intermediate', value: '2' },
     { text: 'Beginner', value: '3' },
   ];
+  private weightMeasurement: string = '0';
 
   constructor() {
     super();
@@ -130,8 +161,7 @@ export default class Control extends Vue {
 
     if (this.weight) {
       this.disableContinueButton = false;
-    }
-    else {
+    } else {
       this.disableContinueButton = true;
     }
 
@@ -159,6 +189,10 @@ export default class Control extends Vue {
       setup complete
     */
     this.$emit('setup-complete', this.deadliftWeight, this.benchWeight, this.cleanWeight); // finished setup
+  }
+
+  private changeWeightMeasurement(val: number) {
+    this.$emit('change-weight-measurement', val);
   }
 }
 </script>

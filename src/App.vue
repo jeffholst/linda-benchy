@@ -32,6 +32,7 @@
                   <Setup 
                     @scale-changed="selectedScaleChanged"
                     @setup-complete="setupComplete"
+                    @change-weight-measurement="change_weight_measurement"
                   />
                 </v-stepper-content>
 
@@ -46,6 +47,7 @@
                     v-bind:deadWeight="deadWeight"
                     v-bind:benchWeight="benchWeight"
                     v-bind:cleanWeight="cleanWeight"
+                    v-bind:weightMeasurementLable="weightMeasurementLable"
                   />
                 </v-stepper-content>
 
@@ -57,6 +59,7 @@
                     v-bind:benchTimeAry="benchTimeAry"
                     v-bind:cleanTimeAry="cleanTimeAry"
                     v-bind:totalTimeAry="totalTimeAry"
+                    v-bind:repScheme="repScheme"
                   />
                 </v-stepper-content>
               </v-stepper-items>
@@ -151,6 +154,12 @@ export default {
       } else {
         this.startingReps = 8;
       }
+
+      this.repScheme = [];
+
+      for (let i = this.startingReps; i > 0; i--) {
+        this.repScheme.push(i);
+      }
     },
     setupComplete(deadWeight, benchWeight, cleanWeight) {
       this.stepCompleted = 2;
@@ -190,6 +199,13 @@ export default {
       this.lastTime = timestamp;
       this.totalTimeAry[reps - 1] += liftDuration;
     },
+    change_weight_measurement(val) {
+      if ( val === 0 ) {
+        this.weightMeasurementLable = 'lbs';
+      } else {
+        this.weightMeasurementLable = 'kgs';
+      }
+    },
   },
   data() {
     return {
@@ -208,6 +224,8 @@ export default {
       benchTimeAry: [],
       cleanTimeAry: [],
       totalTimeAry: [],
+      weightMeasurementLable: 'lbs',
+      repScheme: [],
     };
   },
   created() {

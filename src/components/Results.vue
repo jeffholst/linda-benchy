@@ -50,21 +50,17 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
     formatLift(value: any) {
       const seconds: number = value % 60;
       const minutes: number = Math.trunc((value / 60)) % 60;
-
       const minutesPadded = ('0' + minutes).slice(-2);
       const secondsPadded = ('0' + seconds).slice(-2);
-      
       return(`${minutesPadded}:${secondsPadded}`);
     },
     formatTotal(value: any) {
       const seconds: number = value % 60;
       const minutes: number = Math.trunc((value / 60)) % 60;
       const hours: number = Math.trunc((value / 60 / 60)) % 60;
-
       const hoursPadded = ('0' + hours).slice(-2);
       const minutesPadded = ('0' + minutes).slice(-2);
       const secondsPadded = ('0' + seconds).slice(-2);
-      
       return(`${hoursPadded}:${minutesPadded}:${secondsPadded}`);
     },
   },
@@ -75,8 +71,7 @@ export default class Control extends Vue {
   @Prop() private benchTimeAry!: any;
   @Prop() private cleanTimeAry!: any;
   @Prop() private totalTimeAry!: any;
-
-  private repScheme: number[] = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1 ];
+  @Prop() private repScheme!: number[];
 
   private resetApp() {
     this.$emit('reset-app');
