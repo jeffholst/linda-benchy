@@ -8,7 +8,7 @@
           label="Enter body weight"
           placeholder=" "
           required
-          v-on:change="recalculate"></v-text-field>
+          v-on:keyup="recalculate"></v-text-field>
         </v-flex>
         <v-flex xs6>
           <v-select
@@ -130,6 +130,9 @@ export default class Control extends Vue {
 
     if (this.weight) {
       this.disableContinueButton = false;
+    }
+    else {
+      this.disableContinueButton = true;
     }
 
     if ( this.selectedScale === '1') {
