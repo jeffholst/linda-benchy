@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-layout row>
+    <v-layout row style="padding-bottom: 10px;">
       <v-flex>
         <h3>Time: {{timerDisplay}}</h3>
       </v-flex>
@@ -25,7 +25,29 @@
         </tr>
       </tbody>
     </table>
-    <v-layout row style="padding-top: 40px;">
+
+    <v-layout row style="padding-top: 5px;">
+      <v-flex>
+        <h5>Body Weight: {{bodyWeight}} {{weightMeasurementLable}}</h5>
+      </v-flex>
+    </v-layout>
+
+    <v-layout row text-xs-center style="padding-top: 5px;">
+      <v-flex xs4>
+        <div>Dead</div>
+        <div>{{deadWeight}} {{weightMeasurementLable}}</div>
+      </v-flex>
+      <v-flex xs4>
+        <div>Bench</div>
+        <div>{{benchWeight}} {{weightMeasurementLable}}</div>
+      </v-flex>
+      <v-flex xs4>
+        <div>Clean</div>
+        <div>{{cleanWeight}} {{weightMeasurementLable}}</div>
+      </v-flex>
+    </v-layout>
+
+    <v-layout row style="padding-top: 10px;">
       <v-flex xs12 class="text-xs-center"> 
         <v-btn
           round
@@ -72,6 +94,11 @@ export default class Control extends Vue {
   @Prop() private cleanTimeAry!: any;
   @Prop() private totalTimeAry!: any;
   @Prop() private repScheme!: number[];
+  @Prop() private deadWeight!: number;
+  @Prop() private benchWeight!: number;
+  @Prop() private cleanWeight!: number;
+  @Prop() private weightMeasurementLable!: string;
+  @Prop() private bodyWeight!: string;
 
   private resetApp() {
     this.$emit('reset-app');

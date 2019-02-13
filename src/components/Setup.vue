@@ -161,27 +161,32 @@ export default class Control extends Vue {
 
     if (this.weight) {
       this.disableContinueButton = false;
+
+      if ( this.selectedScale === '1') {
+        deadliftMultiplier = 1.5;
+        benchMultiplier = 1;
+        cleanMultiplier = .75;
+      } else if ( this.selectedScale === '2') {
+        deadliftMultiplier = 1.25;
+        benchMultiplier = .75;
+        cleanMultiplier = .50;
+      } else if ( this.selectedScale === '3') {
+        deadliftMultiplier = .75;
+        benchMultiplier = .50;
+        cleanMultiplier = .33;
+      }
+
+      this.deadliftWeight = Math.round(parseInt(this.weight, 10) * deadliftMultiplier);
+      this.benchWeight = Math.round(parseInt(this.weight, 10) * benchMultiplier);
+      this.cleanWeight = Math.round(parseInt(this.weight, 10) * cleanMultiplier);
+
+      this.$emit('update-body-weight', this.weight);
     } else {
       this.disableContinueButton = true;
+      this.deadliftWeight = 0;
+      this.benchWeight = 0;
+      this.cleanWeight = 0;
     }
-
-    if ( this.selectedScale === '1') {
-      deadliftMultiplier = 1.5;
-      benchMultiplier = 1;
-      cleanMultiplier = .75;
-    } else if ( this.selectedScale === '2') {
-      deadliftMultiplier = 1.25;
-      benchMultiplier = .75;
-      cleanMultiplier = .50;
-    } else if ( this.selectedScale === '3') {
-      deadliftMultiplier = .75;
-      benchMultiplier = .50;
-      cleanMultiplier = .33;
-    }
-
-    this.deadliftWeight = Math.round(parseInt(this.weight, 10) * deadliftMultiplier);
-    this.benchWeight = Math.round(parseInt(this.weight, 10) * benchMultiplier);
-    this.cleanWeight = Math.round(parseInt(this.weight, 10) * cleanMultiplier);
   }
 
   private setupComplete() {
