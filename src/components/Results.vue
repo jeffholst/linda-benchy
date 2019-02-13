@@ -1,6 +1,20 @@
 <template>
   <v-container>
-    <v-layout row style="padding-bottom: 10px;">
+     <v-layout row text-xs-center style="padding-bottom: 5px;">
+      <v-flex xs4>
+        <div>Dead</div>
+        <div>{{deadWeight}} {{weightMeasurementLable}}</div>
+      </v-flex>
+      <v-flex xs4>
+        <div>Bench</div>
+        <div>{{benchWeight}} {{weightMeasurementLable}}</div>
+      </v-flex>
+      <v-flex xs4>
+        <div>Clean</div>
+        <div>{{cleanWeight}} {{weightMeasurementLable}}</div>
+      </v-flex>
+    </v-layout>
+    <v-layout row text-xs-center style="padding-bottom: 10px;">
       <v-flex>
         <h3>Time: {{timerDisplay}}</h3>
       </v-flex>
@@ -29,21 +43,7 @@
     <v-layout row style="padding-top: 5px;">
       <v-flex>
         <h5>Body Weight: {{bodyWeight}} {{weightMeasurementLable}}</h5>
-      </v-flex>
-    </v-layout>
-
-    <v-layout row text-xs-center style="padding-top: 5px;">
-      <v-flex xs4>
-        <div>Dead</div>
-        <div>{{deadWeight}} {{weightMeasurementLable}}</div>
-      </v-flex>
-      <v-flex xs4>
-        <div>Bench</div>
-        <div>{{benchWeight}} {{weightMeasurementLable}}</div>
-      </v-flex>
-      <v-flex xs4>
-        <div>Clean</div>
-        <div>{{cleanWeight}} {{weightMeasurementLable}}</div>
+        <h5>Scale: {{resultScale}}</h5>
       </v-flex>
     </v-layout>
 
@@ -51,6 +51,7 @@
       <v-flex xs12 class="text-xs-center"> 
         <v-btn
           round
+          small
           color="orange"
           class="white--text"
           @click="resetApp"
@@ -99,6 +100,7 @@ export default class Control extends Vue {
   @Prop() private cleanWeight!: number;
   @Prop() private weightMeasurementLable!: string;
   @Prop() private bodyWeight!: string;
+  @Prop() private resultScale!: string;
 
   private resetApp() {
     this.$emit('reset-app');

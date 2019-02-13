@@ -45,7 +45,7 @@
     </v-layout>
     <v-layout row >
       <v-flex text-xs-center header class="orange--text">
-        <div v-if="showClickTip">Click <v-icon small class="orange--text">done_outline</v-icon> when set complete</div>
+        <div v-if="showClickTip">Click <v-icon small class="orange--text">done_outline</v-icon> when each set complete</div>
         <div v-else>&nbsp;</div>
       </v-flex>
     </v-layout>
@@ -279,7 +279,6 @@ export default class Control extends Vue {
   }
 
   private checkForRoundComplete() {
-    this.showClickTip = false;
     if ( this.buttonDeadClicked && this.buttonBenchClicked && this.buttonCleanClicked ) {
       this.buttonDeadClicked = false;
       this.buttonBenchClicked = false;

@@ -193,7 +193,8 @@ export default class Control extends Vue {
     /*
       setup complete
     */
-    this.$emit('setup-complete', this.deadliftWeight, this.benchWeight, this.cleanWeight); // finished setup
+    const scale = this.scaleItems[parseInt(this.selectedScale, 10) - 1].text;
+    this.$emit('setup-complete', this.deadliftWeight, this.benchWeight, this.cleanWeight, scale); // finished setup
   }
 
   private changeWeightMeasurement(val: number) {

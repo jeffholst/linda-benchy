@@ -66,6 +66,7 @@
                     v-bind:cleanWeight="cleanWeight"
                     v-bind:weightMeasurementLable="weightMeasurementLable"
                     v-bind:bodyWeight="bodyWeight"
+                    v-bind:resultScale="resultScale"
                   />
                 </v-stepper-content>
               </v-stepper-items>
@@ -172,11 +173,12 @@ export default {
 
       return(ary);
     },
-    setupComplete(deadWeight, benchWeight, cleanWeight) {
+    setupComplete(deadWeight, benchWeight, cleanWeight, scale) {
       this.stepCompleted = 2;
       this.deadWeight = deadWeight;
       this.benchWeight = benchWeight;
       this.cleanWeight = cleanWeight;
+      this.resultScale = scale;
     },
     workout_complete(workoutTime) {
       this.stepCompleted = 3;
@@ -241,6 +243,7 @@ export default {
       weightMeasurementLable: 'lbs',
       repScheme: this.initializeRepScheme(10),
       bodyWeight: 0,
+      resultScale: '',
     };
   },
   created() {
