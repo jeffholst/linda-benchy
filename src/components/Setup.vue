@@ -110,6 +110,12 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { directives } from 'vuetify/lib';
 
+interface Inputs {
+  bodyWeight: string;
+  scale: string;
+  weightMeasurement: string;
+}
+
 @Component
 export default class Control extends Vue {
   private disableContinueButton: boolean = true;
@@ -146,6 +152,18 @@ export default class Control extends Vue {
       }
 
     return(rval);
+  }
+
+  private created() {
+    const savedInputs: any = localStorage.getItem('lindaParameters');
+
+    if ( savedInputs ) {
+      const inputs: Inputs = JSON.parse(savedInputs);
+      this.weight = inputs.bodyWeight;
+      this.selectedScale = inputs.scale;
+      this.weightMeasurement = inputs.weightMeasurement;
+      this.recalculate();
+    }
   }
 
   private changeScale(newItem: string) {
@@ -193,6 +211,16 @@ export default class Control extends Vue {
     /*
       setup complete
     */
+
+    // save inputs to local storage
+    const parmsKey: string = 'lindaParameters';
+    const inputs: Inputs = {
+      bodyWeight: this.weight,
+      scale: this.selectedScale,
+      weightMeasurement: this.weightMeasurement,
+    };
+    localStorage.setItem('lindaParameters', JSON.stringify(inputs));
+
     const scale = this.scaleItems[parseInt(this.selectedScale, 10) - 1].text;
     this.$emit('setup-complete', this.deadliftWeight, this.benchWeight, this.cleanWeight, scale); // finished setup
   }

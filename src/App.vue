@@ -246,8 +246,5 @@ export default {
       resultScale: '',
     };
   },
-  created() {
-    this.resetTimeVariables();
-  },
 };
 </script>
