@@ -168,6 +168,7 @@ export default class Control extends Vue {
       this.deadliftWeight = inputs.deadWeight;
       this.benchWeight = inputs.benchWeight;
       this.cleanWeight = inputs.cleanWeight;
+      this.disableContinueButton = false;
     }
   }
 
