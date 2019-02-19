@@ -114,6 +114,9 @@ interface Inputs {
   bodyWeight: string;
   scale: string;
   weightMeasurement: string;
+  deadWeight: number;
+  benchWeight: number;
+  cleanWeight: number;
 }
 
 @Component
@@ -162,7 +165,9 @@ export default class Control extends Vue {
       this.weight = inputs.bodyWeight;
       this.selectedScale = inputs.scale;
       this.weightMeasurement = inputs.weightMeasurement;
-      this.recalculate();
+      this.deadliftWeight = inputs.deadWeight;
+      this.benchWeight = inputs.benchWeight;
+      this.cleanWeight = inputs.cleanWeight;
     }
   }
 
@@ -218,6 +223,9 @@ export default class Control extends Vue {
       bodyWeight: this.weight,
       scale: this.selectedScale,
       weightMeasurement: this.weightMeasurement,
+      deadWeight: this.deadliftWeight,
+      benchWeight: this.benchWeight,
+      cleanWeight: this.cleanWeight,
     };
     localStorage.setItem('lindaParameters', JSON.stringify(inputs));
 
